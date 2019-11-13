@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'main_app/css/books_styles.css' %}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Books Home</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-light bg-light justify-content-between navbar-dark bg-dark">
+    <h5 class="h5 text-right text-light"> Welcome, {{user.alias}}!</h5>
+    <a href="/add_book_view" class="navbar-brand">Add Book and Review</a>
+    <a href="/logout" class="navbar-brand">Log Out</a>
+  </nav>
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h5 class="h5">Recent Book Reviews: </h5>
+        {%for review in latest_three_reviews%}
+        <a href="/books/{{review.book.id}}">{{review.book.title}}</a>
+        <p>Rating: {{review.star}}/5</p>
+        <p><a href="/users/{{review.creater.id}}">{{review.creater.alias}}</a> says: {{review.content}} says: {{review.content}}</p>
+        <p>Posted on {{review.created_at|date:"F t, o"}}</p>
+        <hr>
+        {%endfor%}
+      </div>
+      <div class="col">
+        <h5 class="h5">Other Books with Reviews: </h5>
+        <ul class="overflow-auto">
+          {%for review in all_reviews%}
+            <li><a href="/books/{{review.book.id}}">{{review.book.title}}</a></li>
+          {%endfor%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul{
+  height: 120px; 
+  border: 2px solid black; 
+}
+li{
+  margin-bottom: 5px; 
+  margin-left: 5px; 
+}

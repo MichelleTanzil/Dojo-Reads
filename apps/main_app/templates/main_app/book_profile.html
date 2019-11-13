@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Add Book and Review</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+  <nav class="navbar navbar-light bg-light justify-content-between navbar-dark bg-dark">
+    <a href="/books" class="navbar-brand">Home</a>
+    <a href="/logout" class="navbar-brand">Log Out</a>
+  </nav>
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h6 class="h5">{{book.title}}</h6>
+        <p>Author: {{book.author.name}}</p>
+
+        <div>
+          <h5 class="h5">Reviews</h5>
+          <hr>
+          {%for review in book_reviews%}
+            <p>Rating: {{review.star}}/5</p>
+            {%if review.creater == logged_in_user%}
+            <p><a href="/users/{{review.creater.id}}">{{review.creater.alias}}</a> says: {{review.content}}</p>
+            <a href="/users/delete_review/{{review.id}}/{{review.creater.id}}">Delete this Review</a>
+            {%else%}
+            <p><a href="/users/{{review.creater.id}}">{{review.creater.alias}}</a> says: {{review.content}}</p>
+            {%endif%}
+            <p>Posted on {{review.created_at|date:"F t, o"}}</p>
+            <hr>
+          {%endfor%}
+        </div>
+      </div>
+      <div class="col">
+        <form action="/books/add_review/{{book.id}}" method="post">
+          {%csrf_token%}
+          <div class="form-group">
+              <label for="content" class="h5">Add a Review:</label>
+              <textarea name="content" cols="5" rows="5" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="star" class="h5">Rating</label>
+                <select name="star" class="form-control">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3" selected>3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
